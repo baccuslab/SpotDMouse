@@ -156,6 +156,22 @@ try:
                 
                 # Step 5: Send the yaw rate command to the pupper
                 send_velocity_command(yaw_velocity)
+
+                frame = inRgb.getCvFrame()
+                # Draw the bounding box
+                x1 = int(largest_person.xmin * frame.shape[1])
+                y1 = int(largest_person.ymin * frame.shape[0])
+                x2 = int(largest_person.xmax * frame.shape[1])
+                y2 = int(largest_person.ymax * frame.shape[0])
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                label = f"person: {largest_person.confidence:.2f}"
+                cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                # Save the frame
+                timestamp = int(time.time())
+                filename = f"snapshot_person_{timestamp}.jpg"
+                cv2.imwrite(filename, frame)
+                print(f"Saved snapshot to {filename}")
             
             # Small delay to prevent overwhelming the system
             time.sleep(0.01)
@@ -166,83 +182,3 @@ except Exception as e:
     print(f"Error occurred: {e}")
 finally:
     print("Cleanup completed")
-
-# # Connect to device and start pipeline
-# with dai.Device(pipeline) as device:
-
-#     # Output queues will be used to get the rgb frames and nn data from the outputs defined above
-#     qRgb = device.getOutputQueue(name="rgb", maxSize=4, blocking=False)
-#     qDet = device.getOutputQueue(name="nn", maxSize=4, blocking=False)
-#     qNN = device.getOutputQueue(name="nnNetwork", maxSize=4, blocking=False);
-
-#     frame = None
-#     detections = []
-#     startTime = time.monotonic()
-#     counter = 0
-#     color2 = (255, 255, 255)
-
-#     printOutputLayersOnce = True
-
-#     yaw_velocity = 0.0
-
-#     #proportional controller gain
-#     KP = 1.0
-
-#     while True:
-#         if args.sync:
-#             inRgb = qRgb.get()
-#             inDet = qDet.get()
-#             inNN = qNN.get()
-#         else:
-#             inRgb = qRgb.tryGet()
-#             inDet = qDet.tryGet()
-#             inNN = qNN.tryGet()
-
-#         if inDet is not None:
-#             detections = inDet.detections
-#             counter += 1
-
-#         ### TODO: Add your code here to detect a person and run a visual servoing controller
-#         ### Steps:
-#         ### 1. Detect a person by pulling out the labelMap bounding box with the correct label text
-#         ### 2. Compute the x midpoint of the bounding box
-#         ### 3. Compute the error between the x midpoint and the center of the image (the bounds of the image are normalized to be 0 to 1).
-#         ### 4. Compute the yaw rate command using a proportional controller
-#         ### 5. Send the yaw rate command to the pupper
-
-#         print(f"Frame {counter}: {len(detections)} total detections")
-
-#         person_detections = []
-#         for detection in detections:
-#             label_text = labelMap[detection.label]
-#             print(f" Detection {label_text} (confidence: {detection.confidence:.2f})")
-
-#             if label_text == "person":
-#                 person_detections.append(detection)
-        
-#         print(f"Found {len(person_detections)} person detection(s)")
-
-#         if len(person_detections) > 0:
-#             largest_person = max(person_detections, 
-#                                  key=lambda d: (d.xmax - d.xmin) * (d.ymax - d.ymin))
-            
-#             x_midpoint = (largest_person.xmin + largest_person.xmax) / 2.0
-#             print(f"Person x_midpoint: {x_midpoint:.3f}")
-
-#             image_center = 0.5
-#             x_error = x_midpoint - image_center
-#             print(f"X error (person - center): {x_error:.3f}")
-
-#             yaw_velocity = KP * x_error
-#             print(f"Yaw velocity  command: {yaw_velocity:.3f}")
-
-#             max_yaw_rate = 2.0
-#             yaw_velocity = max(-max_yaw_rate, min(max_yaw_rate, yaw_velocity))
-
-#         else:
-#             yaw_velocity = 0.0
-#             print("No person detected - stopping rotation")
-
-#         send_velocity_command(yaw_velocity)
-
-#     time.sleep(0.01)
