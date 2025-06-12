@@ -44,6 +44,9 @@ The pipeline showcases a full perception–action loop:
 
 Watch the 59-second demonstration here:  
 👉 [Demo Video on Google Drive](https://drive.google.com/file/d/1Q1A3k_zQQ4qIFxdiCpT8__rJ8HH7LvGa/view?usp=sharing)
+👉 [Full Demo Video on Google Drive](https://drive.google.com/file/d/1PZsyy0yuu07kRlFrI68BPoruL1FWtB6G/view?usp=share_link)
+
+Many roboticist show their best work to hide the imperfections, but I provide the full video to validate that I am using the control policy in this repo and not human teleoperations and to show where the robot fails: moving closer to the object of interest.
 
 ---
 
