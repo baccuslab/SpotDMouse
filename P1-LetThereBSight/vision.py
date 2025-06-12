@@ -6,6 +6,7 @@ import depthai as dai
 import numpy as np
 import time
 import argparse
+import cv2
 
 def send_velocity_command(yaw_velocity):
     ### TODO: Add your code here to send the velocity command to the pupper
@@ -157,21 +158,28 @@ try:
                 # Step 5: Send the yaw rate command to the pupper
                 send_velocity_command(yaw_velocity)
 
-                frame = inRgb.getCvFrame()
-                # Draw the bounding box
-                x1 = int(largest_person.xmin * frame.shape[1])
-                y1 = int(largest_person.ymin * frame.shape[0])
-                x2 = int(largest_person.xmax * frame.shape[1])
-                y2 = int(largest_person.ymax * frame.shape[0])
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                label = f"person: {largest_person.confidence:.2f}"
-                cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                if inRgb is not None:
+                        frame = inRgb.getCvFrame()
 
-                # Save the frame
-                timestamp = int(time.time())
-                filename = f"snapshot_person_{timestamp}.jpg"
-                cv2.imwrite(filename, frame)
-                print(f"Saved snapshot to {filename}")
+                        # Flip the frame 180 degrees since the camera is upside-down
+                        frame = cv2.rotate(frame, cv2.ROTATE_180)
+
+                        # Draw the bounding box
+                        x1 = int(largest_person.xmin * frame.shape[1])
+                        y1 = int(largest_person.ymin * frame.shape[0])
+                        x2 = int(largest_person.xmax * frame.shape[1])
+                        y2 = int(largest_person.ymax * frame.shape[0])
+                        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                        label = f"person: {largest_person.confidence:.2f}"
+                        cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+                        # Save the frame
+                        timestamp = int(time.time())
+                        filename = f"snapshot_person_{timestamp}.jpg"
+                        cv2.imwrite(filename, frame)
+                        print(f"Saved snapshot to {filename}")
+                else:
+                    print("Warning: No RGB frame available to save snapshot")
             
             # Small delay to prevent overwhelming the system
             time.sleep(0.01)
