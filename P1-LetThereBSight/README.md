@@ -33,10 +33,10 @@ The pipeline showcases a full perception–action loop:
 ## 📷 Snapshots
 
 ### Person Off-Center (before correction)
-![Off Center](snapshot_person_1749756100.jpg)
+![Off Center](snapshot_person_1749756432.jpg)
 
 ### Person Centered (after correction)
-![Centered](snapshot_person_1749756432.jpg)
+![Centered](snapshot_person_1749756100.jpg)
 
 ---
 
