@@ -1,4 +1,4 @@
-# 🐾 P1: Let There Be Sight
+# P1: Let There Be Sight
 
 ## Overview
 
@@ -11,7 +11,7 @@ The pipeline showcases a full perception–action loop:
 
 ---
 
-## 🎯 Objectives
+## Objectives
 
 - Validate successful **leg and gait calibration**
 - Demonstrate working **visual servoing**
@@ -20,7 +20,7 @@ The pipeline showcases a full perception–action loop:
 
 ---
 
-## 🧠 What Was Done
+## What Was Done
 
 - **MobileNet-SSD** model (OpenVINO 2021.4, 6 SHAVEs) was used to detect "person" objects.
 - A **proportional controller** was implemented to compute yaw velocity from visual error.
@@ -30,7 +30,7 @@ The pipeline showcases a full perception–action loop:
 
 ---
 
-## 📷 Snapshots
+## Snapshots
 
 ### Person Off-Center (before correction)
 ![Off Center](snapshot_person_1749756432.jpg)
@@ -40,7 +40,7 @@ The pipeline showcases a full perception–action loop:
 
 ---
 
-## 🎥 Demonstration Video
+## Demonstration Video
 
 Watch the 59-second demonstration here:  
 👉 [Demo Video on Google Drive](https://drive.google.com/file/d/1Q1A3k_zQQ4qIFxdiCpT8__rJ8HH7LvGa/view?usp=sharing)
@@ -50,14 +50,14 @@ Many roboticist show their best work to hide the imperfections, but I provide th
 
 ---
 
-## 🧬 Biological Inspiration
+## Biological Inspiration
 
 - Image downsampling to **300×300** aligns with the input scale used in a biologically constrained encoder model (≈68×102).
 - Future work will build on this to integrate **neural data-trained visual encoders** into the control loop.
 
 ---
 
-## ⚙️ Model Details
+## Model Details
 
 - **Model**: `mobilenet-ssd_openvino_2021.4_6shave.blob`
 - **Task**: Detect common objects in images with high speed and moderate accuracy
@@ -65,7 +65,7 @@ Many roboticist show their best work to hide the imperfections, but I provide th
 
 ---
 
-## ⚠️ Limitations
+## Limitations
 
 - **Low-resolution input** may miss fine details (300×300)
 - Only detects the **largest person**, ignoring others
@@ -74,7 +74,7 @@ Many roboticist show their best work to hide the imperfections, but I provide th
 
 ---
 
-## ✅ Outcome
+## Outcome
 
 This project demonstrates that the robot can:
 - Reliably detect a human object
