@@ -4,7 +4,12 @@ Mini Pupper RL Training with Video Capture
 Records the training process and creates a timelapse video
 """
 
+# ✅ Force GPU selection before any other imports
 import os
+os.environ['CUDA_DEVICE_ORDER'] = 'PCI_BUS_ID'
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'  # Makes GPU 1 appear as cuda:0 to PyTorch
+
+# ✅ Now safe to import everything else
 import time
 import subprocess
 import threading
@@ -19,9 +24,8 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Float64MultiArray
 import cv2
 from datetime import datetime
+from ros_minipupper import MiniPupperEnv
 
-# Force use of RTX 4090 for training
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 class VideoRecorder:
     """Records Gazebo window and training metrics"""
@@ -321,10 +325,11 @@ def main():
     if torch.cuda.is_available():
         print(f"📈 GPU: {torch.cuda.get_device_name()}")
         print(f"💾 Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
-    
+        print(f"📍 CUDA_VISIBLE_DEVICES: {os.environ.get('CUDA_VISIBLE_DEVICES')}")
+ 
     # Initialize components
     video_recorder = VideoRecorder()
-    env = EnhancedMiniPupperEnv()
+    env = MiniPupperEnv()
     trainer = EnhancedRLTrainer(env, device, video_recorder)
     
     # Initialize ROS if available
