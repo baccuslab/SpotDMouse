@@ -151,7 +151,10 @@ class EnhancedRLTrainer:
         self.video_recorder = video_recorder
         
         # Policy network
-        self.policy = PolicyNetwork(env.state_dim, env.action_dim).to(device)
+        state_dim = env.observation_space.shape[0]
+        action_dim = env.action_space.shape[0]
+        self.policy = PolicyNetwork(state_dim, action_dim).to(device)
+
         self.optimizer = optim.Adam(self.policy.parameters(), lr=1e-3)
         
         # Training metrics
@@ -185,10 +188,12 @@ class EnhancedRLTrainer:
             
             # Add some exploration noise for interesting video
             if np.random.random() < 0.1:  # 10% random actions
-                action = np.random.uniform(-1, 1, self.env.action_dim)
+                action = np.random.uniform(-1, 1, self.env.action_space.shape[0])
             
             next_state, reward, done = self.env.step(action)
             
+            # next_state, reward, terminated, truncated = self.env.step(action)
+
             states.append(state)
             actions.append(action)
             rewards.append(reward)
@@ -211,8 +216,13 @@ class EnhancedRLTrainer:
     
     def train_step(self, states, actions, returns):
         """Training step"""
-        states = torch.FloatTensor(states).to(self.device)
-        actions = torch.FloatTensor(actions).to(self.device)
+        # states = torch.FloatTensor(states).to(self.device)
+
+        states = torch.tensor(np.array(states), dtype=torch.float32).to(self.device)
+        # actions = torch.FloatTensor(actions).to(self.device)
+
+        actions = torch.tensor(np.array(actions), dtype=torch.float32).to(self.device)
+
         returns = torch.FloatTensor(returns).to(self.device)
         
         returns = (returns - returns.mean()) / (returns.std() + 1e-8)

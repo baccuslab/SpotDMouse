@@ -11,6 +11,8 @@ from geometry_msgs.msg import Twist
 from std_srvs.srv import Empty
 from gym import spaces
 import time
+import os
+import subprocess
 
 
 class MiniPupperEnv(gym.Env):
@@ -22,10 +24,24 @@ class MiniPupperEnv(gym.Env):
         super(MiniPupperEnv, self).__init__()
 
         # Launch Gazebo headless
-        self.launch_process = subprocess.Popen([
-            'ros2', 'launch', 'mini_pupper_gazebo', launch_file, 'gui:=false'
-        ])
+        # self.launch_process = subprocess.Popen([
+        #     'ros2', 'launch', 'mini_pupper_gazebo', launch_file, 'gui:=false'
+        # ])
 
+        env = os.environ.copy()
+        env.update({
+            "CUDA_VISIBLE_DEVICES": "1",                   # ✅ use GPU 1 (e.g., 4090)
+            "ROBOT_MODEL": "mini_pupper",                  # ✅ required by your sim
+            "DISPLAY": "",                                  # ✅ run Gazebo fully headless
+            "QT_QPA_PLATFORM": "offscreen",                # ✅ prevent Qt-based GUIs
+        })
+
+        self.launch_process = subprocess.Popen([
+            "ros2", "launch", "mini_pupper_simulation", "main.launch.py",
+            "world_init_z:=0.3",
+            "world_init_heading:=3.14159",
+            "gui:=false"                                   # ✅ if supported by launch file
+        ], env=env)
         # Wait for Gazebo to initialize
         print("🚀 Waiting for Gazebo...")
         time.sleep(5)
@@ -79,8 +95,9 @@ class MiniPupperEnv(gym.Env):
         obs = self._get_obs()
         reward = -np.sum(np.abs(obs[:6]))  # Penalize joint displacement
         done = self.step_count >= self.max_steps
+        print(f"🔧 Sending action: {action}")
 
-        return obs, reward, done, {}
+        return obs, reward, done#, {}
 
     def _get_obs(self):
         if self.latest_joint_state is None:
