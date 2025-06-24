@@ -269,10 +269,10 @@ cfg_robot = ArticulationCfg(
     actuators={
         "leg_actuators": DCMotorCfg(
             joint_names_expr=[".*"],
-            saturation_effort=2.5,
+            saturation_effort=3.0,
             velocity_limit=1.5,
-            stiffness=35.0,        # Lower for more realistic servo response
-            damping=7.0,          # Lower for more realistic dynamics
+            stiffness=50.0,        # Lower for more realistic servo response
+            damping=10.0,          # Lower for more realistic dynamics
             friction=0.05,        # Servo friction
             armature=0.001,       # Small servo inertia
         )

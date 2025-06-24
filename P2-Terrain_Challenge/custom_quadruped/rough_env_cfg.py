@@ -1,6 +1,9 @@
 from isaaclab.utils import configclass
+import isaaclab_tasks.manager_based.locomotion.velocity.mdp as mdp
+from isaaclab.managers import RewardTermCfg
 
 from isaaclab_tasks.manager_based.locomotion.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg
+from isaaclab.managers import SceneEntityCfg  # Add this import
 
 ##
 # Pre-defined configs
@@ -23,7 +26,7 @@ class CustomQuadRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.scene.terrain.terrain_generator.sub_terrains["random_rough"].noise_step = 0.01
 
         # reduce action scale
-        self.actions.joint_pos.scale = 0.25
+        self.actions.joint_pos.scale = 0.5
 
         # event - Fix all body name references for MiniPupper
         self.events.push_robot = None
@@ -47,14 +50,80 @@ class CustomQuadRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
 
         # rewards - Fix foot references for MiniPupper (feet are *3 links)
         # Fix: Change .*_foot to .*3 (matches lb3, lf3, rb3, rf3)
-        self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*3"
-        self.rewards.feet_air_time.weight = 0.01
-        self.rewards.undesired_contacts = None
-        self.rewards.dof_torques_l2.weight = -0.0002
-        self.rewards.track_lin_vel_xy_exp.weight = 1.5
-        self.rewards.track_ang_vel_z_exp.weight = 0.75
-        self.rewards.dof_acc_l2.weight = -2.5e-7
+        # self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*3"
+        # self.rewards.feet_air_time.weight = 0.01
+        # self.rewards.undesired_contacts = None
+        # self.rewards.dof_torques_l2.weight = -0.0001
+        # self.rewards.track_lin_vel_xy_exp.weight = 2.0
+        # self.rewards.track_ang_vel_z_exp.weight = 0.75
+        # self.rewards.dof_acc_l2.weight = -2.5e-7
 
+        # self.rewards.base_height = RewardTermCfg(
+        #     func=mdp.base_height_l2, 
+        #     weight=1.0,
+        #     params={"target_height": 0.08}
+        # )
+
+        # self.rewards.penalize_sitting = RewardTermCfg(
+        #     func=mdp.base_height_l2, 
+        #     weight=-2.0, 
+        #     params={"target_height": 0.08}
+        # )
+
+        # self.rewards.joint_vel = RewardTermCfg(
+        #     func=mdp.joint_vel_l1, 
+        #     weight=0.1,
+        #     params={"asset_cfg": SceneEntityCfg("robot")}
+        # )
+
+        # AGGRESSIVE version of your working rewards:
+        # MODERATE RL tuning - Learn coordination first, then speed
+        # Start conservative, build stable foundation
+
+        # Smaller action authority for better coordination
+        self.actions.joint_pos.scale = 0.3  # Was 1.0, now much more conservative
+
+        # Moderate increases - encourage walking without chaos
+        self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*3"
+        self.rewards.feet_air_time.weight = 0.05  # 5x increase (was 0.01) - moderate boost
+        self.rewards.undesired_contacts = None
+
+        # Energy penalties - less restrictive but not zero
+        self.rewards.dof_torques_l2.weight = -0.00005  # Half the penalty (was -0.0001)
+        self.rewards.dof_acc_l2.weight = -1e-7         # Less penalty (was -2.5e-7)
+
+        # Forward motion - significant but not extreme increase
+        self.rewards.track_lin_vel_xy_exp.weight = 4.0  # 2x increase (was 2.0)
+        self.rewards.track_ang_vel_z_exp.weight = 1.5   # 2x increase (was 0.75)
+
+        # Height control - encourage standing without being extreme
+        self.rewards.base_height = RewardTermCfg(
+            func=mdp.base_height_l2, 
+            weight=2.0,  # 2x increase (was 1.0) - moderate
+            params={"target_height": 0.09}  # Slightly higher but realistic
+        )
+
+        # Anti-sitting - firm but not nuclear
+        self.rewards.penalize_sitting = RewardTermCfg(
+            func=mdp.base_height_l2, 
+            weight=-4.0,  # 2x stronger penalty (was -2.0) - firm but reasonable
+            params={"target_height": 0.07}  # Below 7cm gets penalized
+        )
+
+        # Joint movement - encourage without overdoing it
+        self.rewards.joint_vel = RewardTermCfg(
+            func=mdp.joint_vel_l1, 
+            weight=0.2,  # 2x increase (was 0.1) - moderate encouragement
+            params={"asset_cfg": SceneEntityCfg("robot")}
+        )
+
+        # PROGRESSION STRATEGY:
+        # 1. Train with these moderate settings until you see stable walking (maybe 20-30K iterations)
+        # 2. Then gradually increase:
+        #    - action scale: 0.3 → 0.5 → 0.75
+        #    - forward velocity weight: 4.0 → 6.0 → 8.0
+        #    - height penalties: -4.0 → -6.0 → -8.0
+        # 3. This builds a solid foundation before pushing for speed/agility
         # terminations - Fix trunk reference for MiniPupper
         # Fix: Change trunk to base_link
         self.terminations.base_contact.params["sensor_cfg"].body_names = "base_link"
