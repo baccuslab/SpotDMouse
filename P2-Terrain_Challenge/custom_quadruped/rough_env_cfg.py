@@ -75,7 +75,9 @@ class CustomQuadRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         #     weight=0.1,
         #     params={"asset_cfg": SceneEntityCfg("robot")}
         # )
-
+#
+#
+#
         # AGGRESSIVE version of your working rewards:
         # MODERATE RL tuning - Learn coordination first, then speed
         # Start conservative, build stable foundation
@@ -85,37 +87,42 @@ class CustomQuadRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
 # In your rough_env_cfg.py __post_init__ method:
 
         # Smaller action authority for better coordination
-        self.actions.joint_pos.scale = 0.3
+        self.actions.joint_pos.scale = 0.8
 
         # Moderate increases - encourage walking without chaos
-        self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*3"
-        self.rewards.feet_air_time.weight = 0.05
+        # self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*3"
+        self.rewards.feet_air_time.params["sensor_cfg"] = SceneEntityCfg("contact_forces", body_names=["lf3", "rf3", "lb3", "rb3"])
+        self.rewards.feet_air_time.weight = 5#0.05
+        self.rewards.feet_air_time.params["threshold"]=0.1
         self.rewards.undesired_contacts = None
 
         # Energy penalties - less restrictive
         self.rewards.dof_torques_l2.weight = -0.00005
-        self.rewards.dof_acc_l2.weight = -1e-7
+        self.rewards.dof_acc_l2.weight = -1e-8
 
         # Forward motion - significant increase
-        self.rewards.track_lin_vel_xy_exp.weight = 4.0
-        self.rewards.track_ang_vel_z_exp.weight = 1.5
+        self.rewards.track_lin_vel_xy_exp.weight = 8.0
+        self.rewards.track_ang_vel_z_exp.weight = 2.0
 
         # Height control - ONLY use existing functions
         self.rewards.base_height = RewardTermCfg(
             func=mdp.base_height_l2,
-            weight=2.0,
-            params={"target_height": 0.09}
+            weight=50,
+            params={"target_height": 0.12}
         )
 
         # Base contact penalty - discourage crawling (FIXED)
         self.rewards.base_contact_penalty = RewardTermCfg(
             func=mdp.illegal_contact,
-            weight=-5.0,
+            weight=-50.0,
             params={
                 "sensor_cfg": SceneEntityCfg("contact_forces", body_names="base_link"),
-                "threshold": 1.0  # Force threshold in Newtons
+                "threshold": 0.1  # Force threshold in Newtons
             }
         )
+#
+#
+#
         # PROGRESSION STRATEGY:
         # 1. Train with these moderate settings until you see stable walking (maybe 20-30K iterations)
         # 2. Then gradually increase:
@@ -132,6 +139,24 @@ class CustomQuadRoughEnvCfg_PLAY(CustomQuadRoughEnvCfg):
     def __post_init__(self):
         # post init of parent
         super().__post_init__()
+        self.events.physics_material = None
+    
+        # Fix all body name references to be explicit
+        self.events.add_base_mass.params["asset_cfg"] = SceneEntityCfg("robot", body_names=["base_link"])
+        self.events.base_external_force_torque.params["asset_cfg"] = SceneEntityCfg("robot", body_names=["base_link"])
+        
+        # Fix reward body references (use exact foot names)
+        self.rewards.feet_air_time.params["sensor_cfg"] = SceneEntityCfg("contact_forces", body_names=["lf3", "rf3", "lb3", "rb3"])
+        self.rewards.base_contact_penalty.params["sensor_cfg"] = SceneEntityCfg("contact_forces", body_names=["base_link"])
+        
+        # Fix termination references
+        self.terminations.base_contact.params["sensor_cfg"] = SceneEntityCfg("contact_forces", body_names=["base_link"])
+    
+        if hasattr(self.rewards, 'base_contact_penalty'):
+            self.rewards.base_contact_penalty.params["sensor_cfg"] = SceneEntityCfg(
+                "contact_forces", 
+                body_names=["base_link"]
+            )       
 
         # make a smaller scene for play
         self.scene.num_envs = 50
