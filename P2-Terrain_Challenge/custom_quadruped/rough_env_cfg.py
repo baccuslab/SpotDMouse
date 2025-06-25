@@ -81,42 +81,41 @@ class CustomQuadRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         # Start conservative, build stable foundation
 
         # Smaller action authority for better coordination
-        self.actions.joint_pos.scale = 0.3  # Was 1.0, now much more conservative
+        # Smaller action authority for better coordination
+# In your rough_env_cfg.py __post_init__ method:
+
+        # Smaller action authority for better coordination
+        self.actions.joint_pos.scale = 0.3
 
         # Moderate increases - encourage walking without chaos
         self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*3"
-        self.rewards.feet_air_time.weight = 0.05  # 5x increase (was 0.01) - moderate boost
+        self.rewards.feet_air_time.weight = 0.05
         self.rewards.undesired_contacts = None
 
-        # Energy penalties - less restrictive but not zero
-        self.rewards.dof_torques_l2.weight = -0.00005  # Half the penalty (was -0.0001)
-        self.rewards.dof_acc_l2.weight = -1e-7         # Less penalty (was -2.5e-7)
+        # Energy penalties - less restrictive
+        self.rewards.dof_torques_l2.weight = -0.00005
+        self.rewards.dof_acc_l2.weight = -1e-7
 
-        # Forward motion - significant but not extreme increase
-        self.rewards.track_lin_vel_xy_exp.weight = 4.0  # 2x increase (was 2.0)
-        self.rewards.track_ang_vel_z_exp.weight = 1.5   # 2x increase (was 0.75)
+        # Forward motion - significant increase
+        self.rewards.track_lin_vel_xy_exp.weight = 4.0
+        self.rewards.track_ang_vel_z_exp.weight = 1.5
 
-        # Height control - encourage standing without being extreme
+        # Height control - ONLY use existing functions
         self.rewards.base_height = RewardTermCfg(
-            func=mdp.base_height_l2, 
-            weight=2.0,  # 2x increase (was 1.0) - moderate
-            params={"target_height": 0.09}  # Slightly higher but realistic
+            func=mdp.base_height_l2,
+            weight=2.0,
+            params={"target_height": 0.09}
         )
 
-        # Anti-sitting - firm but not nuclear
-        self.rewards.penalize_sitting = RewardTermCfg(
-            func=mdp.base_height_l2, 
-            weight=-4.0,  # 2x stronger penalty (was -2.0) - firm but reasonable
-            params={"target_height": 0.07}  # Below 7cm gets penalized
+        # Base contact penalty - discourage crawling (FIXED)
+        self.rewards.base_contact_penalty = RewardTermCfg(
+            func=mdp.illegal_contact,
+            weight=-5.0,
+            params={
+                "sensor_cfg": SceneEntityCfg("contact_forces", body_names="base_link"),
+                "threshold": 1.0  # Force threshold in Newtons
+            }
         )
-
-        # Joint movement - encourage without overdoing it
-        self.rewards.joint_vel = RewardTermCfg(
-            func=mdp.joint_vel_l1, 
-            weight=0.2,  # 2x increase (was 0.1) - moderate encouragement
-            params={"asset_cfg": SceneEntityCfg("robot")}
-        )
-
         # PROGRESSION STRATEGY:
         # 1. Train with these moderate settings until you see stable walking (maybe 20-30K iterations)
         # 2. Then gradually increase:

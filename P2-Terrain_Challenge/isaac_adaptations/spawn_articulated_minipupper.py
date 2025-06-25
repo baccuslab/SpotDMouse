@@ -246,7 +246,7 @@ cfg_robot = ArticulationCfg(
         ),
     ),
     init_state=ArticulationCfg.InitialStateCfg(
-        pos=(0.0, 0.0, 0.12),  # Conservative standing height
+        pos=(0.0, 0.0, 0.09),  # Conservative standing height
         joint_pos={
             "base_lf1": -0.1181,
             "lf1_lf2": 0.8360,
@@ -266,18 +266,28 @@ cfg_robot = ArticulationCfg(
     soft_joint_pos_limit_factor=0.95,
     # Tuned for MiniPupper's actual servo specs (likely SG90/MG90S micro servos)
     # More realistic for RL if you want servo dynamics
+    # actuators={
+    #     "leg_actuators": DCMotorCfg(
+    #         joint_names_expr=[".*"],
+    #         saturation_effort=3.0,
+    #         velocity_limit=1.5,
+    #         stiffness=50.0,        # Lower for more realistic servo response
+    #         damping=10.0,          # Lower for more realistic dynamics
+    #         friction=0.05,        # Servo friction
+    #         armature=0.001,       # Small servo inertia
+    #     )
+    # }
     actuators={
         "leg_actuators": DCMotorCfg(
             joint_names_expr=[".*"],
-            saturation_effort=3.0,
-            velocity_limit=1.5,
-            stiffness=50.0,        # Lower for more realistic servo response
-            damping=10.0,          # Lower for more realistic dynamics
-            friction=0.05,        # Servo friction
-            armature=0.001,       # Small servo inertia
+            saturation_effort=5.0,     # High torque
+            velocity_limit=3.0,
+            stiffness=80.0,           # Very stiff
+            damping=16.0,             # Strong damping
+            friction=0.01,            # Low friction
+            armature=0.001,
         )
-    }
-    
+    }    
     # Alternative: If using higher-torque servos or want to match URDF
     # actuators={
     #     "leg_actuators": ImplicitActuatorCfg(

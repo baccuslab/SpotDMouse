@@ -18,6 +18,9 @@ from isaaclab.actuators import ImplicitActuatorCfg
 from isaaclab.assets import AssetBaseCfg
 from isaaclab.assets.articulation import ArticulationCfg
 from isaaclab.scene import InteractiveScene, InteractiveSceneCfg
+from isaaclab.actuators import ActuatorNetMLPCfg, DCMotorCfg, ImplicitActuatorCfg
+from isaaclab.assets.articulation import ArticulationCfg
+
 
 # === Gait Controller ===
 class GaitController:
@@ -66,6 +69,7 @@ cfg_robot = ArticulationCfg(
         pos=(0.0, 0.0, 0.055),
     ),
 )
+
 
 # === Scene Config ===
 class NewRobotsSceneCfg(InteractiveSceneCfg):
