@@ -52,6 +52,10 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * Without these modifications, the robot jitters, flops, or fails to walk.
 
 ![SpotDMouse IsaacSim Standing Screenshot](trainedpuppers.png)
+## Demo Video
+
+[SpotDMouse Terrain Challenge Demo](https://drive.google.com/file/d/1zm9YpwRjZnWdH_Vl9Ln2R5OwYzORuqIE/view?usp=sharing)
+
 
 ---
 
