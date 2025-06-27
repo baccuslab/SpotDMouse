@@ -97,13 +97,3 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * Expect ongoing technical workarounds until Isaac Sim offers better support for small-scale robots.
 ---
 
-## Later Add
-
-1. **CAD ➡️ URDF ➡️ USD Pipeline Diagram** highlighting where small parts get merged.
-2. **Contact Surface Comparison** between large and small robots.
-3. **Training Progression Graph**, showing reward over time with snapshots of robot behavior.
-4. **Isaac Sim Version Timeline**, indicating stability issues.
-5. **Torque Application Plot**, demonstrating scale mismatches.
-6. **Error Log Screenshot** of a typical small-robot GPU simulation crash.
-
-Contributions to improve miniature robot simulation in Isaac Sim are welcome!
