@@ -68,7 +68,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * Common errors include illegal memory access and CUDA synchronization failures.
 * For small robots, CPU-only physics is often required, sacrificing speed.
 
-[***Suggested Image:*** Screenshot of an Isaac Sim error log showing GPU failure during small articulation simulation.]
+![Training Progress](training%20progress.png)
 
 ---
 
