@@ -41,19 +41,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 
 ---
 
-### 3. Version-to-Version Instability
-
-* Isaac Sim updates can significantly alter physics behavior:
-
-  * **2022.2.1**: Quadrupeds balance well.
-  * **2023.1.1** and beyond: Identical setups experience falling or instability.
-* This necessitates constant re-tuning of physics settings with each upgrade.
-
-[***Suggested Image:*** Timeline of Isaac Sim versions with stability indicators.]
-
----
-
-### 4. Controller Tuning Challenges
+### 3. Controller Tuning Challenges
 
 * The default quadruped controller is designed for full-size robots.
 * On miniatures:
@@ -66,7 +54,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 
 ---
 
-### 5. GPU Simulation Crashes with Small Articulations
+### 4. GPU Simulation Crashes with Small Articulations
 
 * PhysX GPU acceleration frequently crashes when handling tiny links with low mass.
 * Common errors include illegal memory access and CUDA synchronization failures.
