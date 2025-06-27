@@ -38,7 +38,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
   * The robot may bounce, slide, or collapse unexpectedly.
 * To mitigate this, much smaller physics time steps (e.g., 1/800s) and parameter tuning are required.
 
-[***Suggested Image:*** Side-by-side comparison of contact patches for a full-size vs. miniature quadruped.]
+![SpotDMouse IsaacSim Screenshot](Screenshot from 2025-06-26 21-40-54.png)
 
 ---
 
