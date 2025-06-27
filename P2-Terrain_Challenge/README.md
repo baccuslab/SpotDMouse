@@ -69,6 +69,8 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * For small robots, CPU-only physics is often required, sacrificing speed.
 
 ![Training Progress](training%20progress.png)
+![Isaac Sim Screenshot](Screenshot%20from%202025-06-26%2022-19-20.png)
+
 
 ---
 
