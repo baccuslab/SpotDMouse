@@ -23,7 +23,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * Isaac Sim merges these small parts into larger parent links, leading to **incorrect contact dynamics**.
 * The entire leg may be treated as a contact surface rather than just the foot, resulting in exaggerated friction and unrealistic stability.
 
-[***Suggested Image:*** Pipeline diagram showing the conversion process and where small parts get merged.]
+![SpotDMouse Image](path/to/your/image.png)
 
 ---
 
