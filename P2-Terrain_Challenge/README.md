@@ -85,6 +85,8 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 | GPU simulation instability     | PhysX GPU acceleration fails with tiny articulations. |
 
 ---
+![Isaac Sim GPU Crash Screenshot](Screenshot%20from%202025-06-26%2022-24-16.png)
+Registers no mass for parts that DEIFNITELY have masses in the URDF to USD convertsion.
 
 ## Lessons Learned
 
@@ -96,4 +98,6 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
   * CPU-based physics may be necessary.
 * Expect ongoing technical workarounds until Isaac Sim offers better support for small-scale robots.
 ---
+
+
 
