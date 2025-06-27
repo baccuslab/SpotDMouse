@@ -23,7 +23,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * Isaac Sim merges these small parts into larger parent links, leading to **incorrect contact dynamics**.
 * The entire leg may be treated as a contact surface rather than just the foot, resulting in exaggerated friction and unrealistic stability.
 
-***Suggested Image:*** Pipeline diagram showing the conversion process and where small parts get merged.
+[***Suggested Image:*** Pipeline diagram showing the conversion process and where small parts get merged.]
 
 ---
 
@@ -37,7 +37,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
   * The robot may bounce, slide, or collapse unexpectedly.
 * To mitigate this, much smaller physics time steps (e.g., 1/800s) and parameter tuning are required.
 
-***Suggested Image:*** Side-by-side comparison of contact patches for a full-size vs. miniature quadruped.
+[***Suggested Image:*** Side-by-side comparison of contact patches for a full-size vs. miniature quadruped.]
 
 ---
 
@@ -49,7 +49,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
   * **2023.1.1** and beyond: Identical setups experience falling or instability.
 * This necessitates constant re-tuning of physics settings with each upgrade.
 
-***Suggested Image:*** Timeline of Isaac Sim versions with stability indicators.
+[***Suggested Image:*** Timeline of Isaac Sim versions with stability indicators.]
 
 ---
 
@@ -62,7 +62,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
   * Joint torques need tighter control.
 * Without these modifications, the robot jitters, flops, or fails to walk.
 
-***Suggested Image:*** Graph showing excessive torque application for a small robot vs. properly scaled control.
+[***Suggested Image:*** Graph showing excessive torque application for a small robot vs. properly scaled control.]
 
 ---
 
@@ -72,7 +72,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * Common errors include illegal memory access and CUDA synchronization failures.
 * For small robots, CPU-only physics is often required, sacrificing speed.
 
-***Suggested Image:*** Screenshot of an Isaac Sim error log showing GPU failure during small articulation simulation.
+[***Suggested Image:*** Screenshot of an Isaac Sim error log showing GPU failure during small articulation simulation.]
 
 ---
 
