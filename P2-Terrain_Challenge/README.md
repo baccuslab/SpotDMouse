@@ -51,7 +51,7 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
   * Joint torques need tighter control.
 * Without these modifications, the robot jitters, flops, or fails to walk.
 
-[***Suggested Image:*** Graph showing excessive torque application for a small robot vs. properly scaled control.]
+![SpotDMouse IsaacSim Standing Screenshot](trainedpupper.png)
 
 ---
 
