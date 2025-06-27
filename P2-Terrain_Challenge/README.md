@@ -39,6 +39,9 @@ While Isaac Sim is excellent for full-size quadrupeds, it currently struggles wi
 * To mitigate this, much smaller physics time steps (e.g., 1/800s) and parameter tuning are required.
 
 ![SpotDMouse IsaacSim Standing Screenshot](Screenshot%20from%202025-06-26%2021-40-54.png)
+## Demo Video
+
+[SpotDMouse Isaac Sim Standing Example](https://drive.google.com/file/d/1zpaR-G8EM_XJqvA5RK6nePZn0AQlh4kK/view?usp=sharing)
 
 ---
 
