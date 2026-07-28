@@ -1,0 +1,36 @@
+{
+  "history": 5,
+  "input_dim": 6,
+  "hidden": 32,
+  "sim_defaults": [
+    0.0,
+    0.785,
+    -1.57,
+    0.0,
+    0.785,
+    -1.57,
+    0.0,
+    0.785,
+    -1.57,
+    0.0,
+    0.785,
+    -1.57
+  ],
+  "joint_names": [
+    "LF_hip",
+    "LF_thigh",
+    "LF_calf",
+    "RF_hip",
+    "RF_thigh",
+    "RF_calf",
+    "LB_hip",
+    "LB_thigh",
+    "LB_calf",
+    "RB_hip",
+    "RB_thigh",
+    "RB_calf"
+  ],
+  "trained_at_hz": 25,
+  "hw_scale_trained": 0.55,
+  "description": "Per-joint servo model: real_disp[t+1] = f(cmd_disp[t:t-K], real_disp[t])"
+}

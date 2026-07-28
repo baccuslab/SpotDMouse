@@ -1,0 +1,5 @@
+# Robot-side (Raspberry Pi 4) deployment deps for deploy_network.py
+# NOTE: also requires the MangDang Mini Pupper 2 stack (MangDang.mini_pupper.*),
+# which ships on the robot image and is not installable from PyPI.
+torch
+numpy
