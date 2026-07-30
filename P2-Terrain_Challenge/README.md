@@ -1,4 +1,4 @@
-# Cost-Constrained Quadrupedal RL → an Emergent Central Pattern Generator
+# Cost-Constrained Quadrupedal RL
 
 Code, trained policies, and deployment stack for
 **["Reinforcement Learning on Cost-Constrained Quadrupedal Hardware."](https://arxiv.org/abs/2607.26434)**
@@ -25,7 +25,7 @@ Taking inspiration from biology, whose own sensorimotor loops carry
 
 ## Videos
 
-- [Walking in sim](https://drive.google.com/file/d/11_WlN_X67XkxFR6eFnWp75GHwoshYI6O/view?usp=share_link)
+- [Walking in sim](https://drive.google.com/file/d/1Uyh5017P83XtV9974JcwY0-OMyFR-utT/view?usp=share_link)
 - [Sim and reality (combined)](https://drive.google.com/file/d/1wTMp1C6kCgLkTJz4_60SDeLPLYNQNBTI/view?usp=share_link)
 - [Walking in reality](https://drive.google.com/file/d/11_WlN_X67XkxFR6eFnWp75GHwoshYI6O/view?usp=share_link)
 
