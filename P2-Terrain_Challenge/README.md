@@ -1,7 +1,7 @@
 # Cost-Constrained Quadrupedal RL → an Emergent Central Pattern Generator
 
 Code, trained policies, and deployment stack for
-**"Reinforcement Learning on Cost-Constrained Quadrupedal Hardware."**
+**["Reinforcement Learning on Cost-Constrained Quadrupedal Hardware."](https://arxiv.org/abs/2607.26434)**
 
 ## What this is
 
